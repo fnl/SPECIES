@@ -6,10 +6,9 @@
 #include "tagger_types.h"
 
 #include <vector>
-#include <tr1/unordered_map>
+#include <unordered_map>
 
 using namespace std;
-using namespace std::tr1;
 
 typedef vector<SERIAL> SERIALS;
 typedef unordered_set<SERIAL> ENTITY_SET;

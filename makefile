@@ -1,6 +1,7 @@
 CC     = g++
 CFLAGS = -fpic -pthread -Wall -O3
 LFLAGS = -fpic -shared -lboost_regex
+CXXFLAGS = "-std=c++11"
 
 all: organisms species
 

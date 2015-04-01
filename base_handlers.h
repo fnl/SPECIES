@@ -5,7 +5,6 @@
 #include "tagger_types.h"
 
 using namespace std;
-using namespace std::tr1;
 
 typedef vector<SERIAL> SERIALS;
 typedef unordered_set<SERIAL> ENTITY_SET;
