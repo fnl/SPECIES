@@ -378,19 +378,17 @@ Document* TsvDocumentReader::read_document()
 		document->line = line;
 		int index = 0;
 		if (line) {
+			// New, simplified format: PMID -tab- Title -tab- Abstract
 			// Find first key and skip additional keys.
-			while (line[index] != '\0' && line[index] != '\t' && line[index] != ':') {
+			while (line[index] != '\0' && line[index] != '\t') { // only TSV
 				++index;
 			}
-			if (line[index] == ':') {
-				char* key = line+index+1;
-				while (line[index] != '\0'  && line[index] != '\t' && line[index] != '|') {
-					++index;
-				}
-				char replaced = line[index];
+			if (line[index] == '\t') { // only TSV
 				line[index] = '\0';
-				document->key = atoi(key);
-				line[index] = replaced;
+				document->name = new char[index+1]; // set PMID as name
+				memcpy(document->name, line, index+1);
+				document->key = atoi(line); // set PMID as key (must be integer!)
+				line[index] = '\t';
 				// Check if key was previously seen.
 				if (document->key && this->seen.find(document->key) == this->seen.end()) {
 					this->seen.insert(document->key);
@@ -403,27 +401,7 @@ Document* TsvDocumentReader::read_document()
 		}
 		this->unlock();
 		if (valid) {
-			while (line[index] != '\0' && line[index] != '\t') {
-				++index;
-			}
-			// Skip authors.
-			if (line[index] != '\0') {
-				do {
-					++index;
-				} while (line[index] != '\0' && line[index] != '\t');
-			}
-			// Skip journal.
-			if (line[index] != '\0') {
-				do {
-					++index;
-				} while (line[index] != '\0' && line[index] != '\t');
-			}
-			// Skip year.
-			if (line[index] != '\0') {
-				do {
-					++index;
-				} while (line[index] != '\0' && line[index] != '\t');
-			}
+			// New, simplified format.
 			// Find text.
 			if (line[index] != '\0' && line[index+1] != '\0') {
 				document->text = line+index+1;
